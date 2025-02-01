@@ -9,7 +9,7 @@ source:
   sha256: 39971c0c092e90e9ab424ba2e1ec6975d5db88e881ff3d9fedd5244b6a51f071
 
 build:
-  skip: true  # [py<37]
+  skip: true  # win
   number: 0
 
 requirements:
@@ -20,14 +20,10 @@ requirements:
     - ninja
     - pkg-config
     - {{ stdlib("c") }}
-    - {{ compiler('fortran') }}
     - {{ compiler('c') }}
     - {{ compiler('fortran') }}
-    - {{ compiler('m2w64_fortran') }}  # [win]
-    - {{ compiler('c') }}
   host:
     - meson-python
-    - libpython  # [win]
     - python
     - python-build
     - pip
