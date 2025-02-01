@@ -1,4 +1,4 @@
-{% set version = "0.3" %}
+{% set version = "0.3.1" %}
 
 package:
   name: climlab-cam3-radiation
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/climlab/climlab-cam3-radiation/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 0b92f0c82a16507eebd14d0f041d659a10a3afc5758b8080e78693a978b38ebe
+  sha256: 39971c0c092e90e9ab424ba2e1ec6975d5db88e881ff3d9fedd5244b6a51f071
 
 build:
   skip: true  # [py<37]
