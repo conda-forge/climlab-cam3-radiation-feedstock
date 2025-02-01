@@ -1,4 +1,4 @@
-{% set version = "0.2" %}
+{% set version = "0.3.1" %}
 
 package:
   name: climlab-cam3-radiation
@@ -6,30 +6,32 @@ package:
 
 source:
   url: https://github.com/climlab/climlab-cam3-radiation/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 05d8105535458c403744f24bf8c3d74e9e22e7155ee39e69855ad1615165cc2f
+  sha256: 39971c0c092e90e9ab424ba2e1ec6975d5db88e881ff3d9fedd5244b6a51f071
 
 build:
-  script: {{ PYTHON }} -m pip install . -vv
-  skip: true  # [py<37]
-  number: 3
+  skip: true  # [win]
+  number: 0
 
 requirements:
   build:
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - numpy                                  # [build_platform != target_platform]
-    - {{ compiler('fortran') }}
-    - {{ compiler('m2w64_fortran') }}  # [win]
+    - ninja
+    - pkg-config
+    - {{ stdlib("c") }}
     - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
   host:
-    - libpython  # [win]
+    - meson-python
     - python
-    - setuptools
+    - python-build
     - pip
     - numpy
+    - packaging >=20.0
   run:
     - python
-    - {{ pin_compatible('numpy') }}
+    - numpy
     - xarray
     - pooch
     - netcdf4
