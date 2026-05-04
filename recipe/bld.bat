@@ -5,10 +5,11 @@ set "FFLAGS=-fms-runtime-lib=static"
 REM Use lld-link instead of MSVC link.exe: lld-link can read llvm-ar .a archives.
 set "CC_LD=lld-link"
 
-REM Keep library search paths so lld-link can find flang and clang runtime libs.
-set "FLANG_LIB_BASE=%BUILD_PREFIX%\Library\lib\clang\21"
-set "LIB=%FLANG_LIB_BASE%\lib\windows;%FLANG_LIB_BASE%\lib\x86_64-pc-windows-msvc;%BUILD_PREFIX%\Library\lib;%LIB%"
-set "LIBPATH=%FLANG_LIB_BASE%\lib\windows;%FLANG_LIB_BASE%\lib\x86_64-pc-windows-msvc;%BUILD_PREFIX%\Library\lib;%LIBPATH%"
+REM clang_rt builtins install to lib/clang/<ver>/lib/windows/ (no Library\ prefix).
+REM flang_rt.runtime.static.lib installs to Library\lib\.
+set "CLANG_RT_DIR=%BUILD_PREFIX%\lib\clang\21\lib\windows"
+set "LIB=%CLANG_RT_DIR%;%BUILD_PREFIX%\Library\lib;%LIB%"
+set "LIBPATH=%CLANG_RT_DIR%;%BUILD_PREFIX%\Library\lib;%LIBPATH%"
 
 REM meson generates Fortran runtime flags as '-Wl,-defaultlib:...' (compiler-driver
 REM format) which lld-link silently ignores, leaving __floatsitf etc. unresolved.
