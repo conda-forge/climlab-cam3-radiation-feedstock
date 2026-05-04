@@ -2,8 +2,11 @@ REM Make flang embed flang_rt.runtime.static.lib (conda-forge ships this but not
 REM the dynamic variant).
 set "FFLAGS=-fms-runtime-lib=static"
 
-REM Replicate all three libpaths flang passes when it drives a link, so MSVC
-REM link.exe can find flang_rt.runtime.static.lib when meson calls it directly.
+REM Use lld-link instead of MSVC link.exe: lld-link can read llvm-ar .a archives
+REM and understands -Wl, flags that link.exe silently ignores or rejects (LNK1107).
+set "CC_LD=lld-link"
+
+REM Keep library search paths so lld-link can find flang and clang runtime libs.
 set "FLANG_LIB_BASE=%BUILD_PREFIX%\Library\lib\clang\21"
 set "LIB=%FLANG_LIB_BASE%\lib\windows;%FLANG_LIB_BASE%\lib\x86_64-pc-windows-msvc;%BUILD_PREFIX%\Library\lib;%LIB%"
 set "LIBPATH=%FLANG_LIB_BASE%\lib\windows;%FLANG_LIB_BASE%\lib\x86_64-pc-windows-msvc;%BUILD_PREFIX%\Library\lib;%LIBPATH%"
