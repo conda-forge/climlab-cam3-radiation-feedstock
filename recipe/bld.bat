@@ -10,9 +10,10 @@ set "FLANG_LIB_BASE=%BUILD_PREFIX%\Library\lib\clang\21"
 set "LIB=%FLANG_LIB_BASE%\lib\windows;%FLANG_LIB_BASE%\lib\x86_64-pc-windows-msvc;%BUILD_PREFIX%\Library\lib;%LIB%"
 set "LIBPATH=%FLANG_LIB_BASE%\lib\windows;%FLANG_LIB_BASE%\lib\x86_64-pc-windows-msvc;%BUILD_PREFIX%\Library\lib;%LIBPATH%"
 
-REM lld-link silently ignores driver-format '-Wl,-defaultlib:...' flags that meson
-REM generates for flang, so explicitly pull in clang_rt.builtins (__floatsitf etc.).
-set "LDFLAGS=/defaultlib:clang_rt.builtins-x86_64.lib"
-
-%PYTHON% -m pip install . --no-build-isolation --no-deps -vv -Csetup-args=-Db_vscrt=none
+REM meson generates Fortran runtime flags as '-Wl,-defaultlib:...' (compiler-driver
+REM format) which lld-link silently ignores, leaving __floatsitf etc. unresolved.
+REM Pass clang_rt.builtins via -Dc_link_args instead of LDFLAGS: meson applies
+REM c_link_args only at link time, so it never reaches flang's linker-detection step
+REM (which would misinterpret '/defaultlib:...' as a file path and abort).
+%PYTHON% -m pip install . --no-build-isolation --no-deps -vv -Csetup-args=-Db_vscrt=none "-Csetup-args=-Dc_link_args=/defaultlib:clang_rt.builtins-x86_64.lib"
 if errorlevel 1 exit /b 1
