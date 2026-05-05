@@ -9,8 +9,8 @@ source:
   sha256: 42f992ce82448d1623bc1f8043fcf278ce177ff06abec60d9f66a09d5b36d322
 
 build:
-  skip: true  # [win]
-  number: 0
+  skip: true  # [py<39]
+  number: 1
 
 requirements:
   build:
@@ -19,8 +19,8 @@ requirements:
     - numpy                                  # [build_platform != target_platform]
     - ninja
     - pkg-config
-    - {{ stdlib("c") }}
     - {{ compiler('c') }}
+    - {{ stdlib("c") }}
     - {{ compiler('fortran') }}
   host:
     - meson-python
@@ -42,7 +42,7 @@ test:
   imports:
     - climlab_cam3_radiation
   commands:
-    - pytest -v --pyargs climlab_cam3_radiation
+    - pytest -v --pyargs climlab_cam3_radiation  # [not win]
 
 about:
   home: https://github.com/climlab/climlab-cam3-radiation
