@@ -42,7 +42,7 @@ test:
   imports:
     - climlab_cam3_radiation
   commands:
-    - pytest -v --pyargs climlab_cam3_radiation
+    - pytest -v --pyargs climlab_cam3_radiation  # [not win]
 
 about:
   home: https://github.com/climlab/climlab-cam3-radiation
